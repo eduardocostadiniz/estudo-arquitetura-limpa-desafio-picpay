@@ -16,20 +16,24 @@ public class TransferUseCaseImpl implements TransferUseCase {
     private final TransactionValidateUseCase transactionValidateUseCase;
     private final CreateTransactionUseCase createTransactionUseCase;
     private final UserNotificationUseCase userNotificationUseCase;
+    private final TransactionPinValidateUseCase transactionPinValidateUseCase;
     private final TransferGateway transferGateway;
 
-    public TransferUseCaseImpl(FindWalletByTaxNumberUseCase findWalletByTaxNumberUseCase, TransactionValidateUseCase transactionValidateUseCase, CreateTransactionUseCase createTransactionUseCase, UserNotificationUseCase userNotificationUseCase, TransferGateway transferGateway) {
+    public TransferUseCaseImpl(FindWalletByTaxNumberUseCase findWalletByTaxNumberUseCase, TransactionValidateUseCase transactionValidateUseCase, CreateTransactionUseCase createTransactionUseCase, UserNotificationUseCase userNotificationUseCase, TransactionPinValidateUseCase transactionPinValidateUseCase, TransferGateway transferGateway) {
         this.findWalletByTaxNumberUseCase = findWalletByTaxNumberUseCase;
         this.transactionValidateUseCase = transactionValidateUseCase;
         this.createTransactionUseCase = createTransactionUseCase;
         this.userNotificationUseCase = userNotificationUseCase;
+        this.transactionPinValidateUseCase = transactionPinValidateUseCase;
         this.transferGateway = transferGateway;
     }
 
     @Override
-    public Boolean transfer(String fromTaxNumber, String toTaxNumber, BigDecimal value) {
+    public Boolean transfer(String fromTaxNumber, String toTaxNumber, BigDecimal value, String pin) {
         Wallet from = this.findWalletByTaxNumberUseCase.findWalletByTaxNumber(fromTaxNumber);
         Wallet to = this.findWalletByTaxNumberUseCase.findWalletByTaxNumber(toTaxNumber);
+
+        this.transactionPinValidateUseCase.validate(from.getTransactionPin());
 
         from.transferValue(value);
         to.receiveValue(value);

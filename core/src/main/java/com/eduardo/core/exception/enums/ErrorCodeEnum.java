@@ -15,6 +15,8 @@ public enum ErrorCodeEnum {
     TR0004("Transfer not authorized", "TR-0004"),
 
     TP0001("PIN is invalid", "TP-0001"),
+    TP0002("User PIN is blocked", "TP-0002"),
+    TP0003("Transaction PIN incorrect. %d left", "TP-0003"),
 
     NO0001("Error when notifying transfer", "NO-0001"),
 

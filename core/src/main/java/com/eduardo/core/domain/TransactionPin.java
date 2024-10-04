@@ -4,11 +4,12 @@ import com.eduardo.core.exception.TransactionPinException;
 import com.eduardo.core.exception.enums.ErrorCodeEnum;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class TransactionPin {
 
+    private static final Integer NUMBER_OF_CHANCES = 3;
     private Long id;
-    private User user;
     private String pin;
     private Integer attempt;
     private Boolean blocked;
@@ -18,17 +19,15 @@ public class TransactionPin {
     public TransactionPin() {
     }
 
-    public TransactionPin(User user, String pin) {
-        this.user = user;
+    public TransactionPin(String pin) {
         this.setPin(pin);
-        this.attempt = 3;
+        this.attempt = TransactionPin.NUMBER_OF_CHANCES;
         this.blocked = false;
         this.createdAt = LocalDateTime.now();
     }
 
-    public TransactionPin(Long id, User user, String pin, Integer attempt, Boolean blocked, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public TransactionPin(Long id, String pin, Integer attempt, Boolean blocked, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
-        this.user = user;
         this.pin = pin;
         this.attempt = attempt;
         this.blocked = blocked;
@@ -44,14 +43,6 @@ public class TransactionPin {
         this.id = id;
     }
 
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
     public String getPin() {
         return pin;
     }
@@ -65,8 +56,13 @@ public class TransactionPin {
         return attempt;
     }
 
-    public void setAttempt(Integer attempt) {
-        this.attempt = attempt;
+    public void setAttempt() {
+        if (this.attempt == 1) {
+            this.blocked = true;
+            this.attempt = 0;
+        } else {
+            this.attempt--;
+        }
     }
 
     public Boolean getBlocked() {
@@ -98,18 +94,17 @@ public class TransactionPin {
         if (this == o) return true;
         if (!(o instanceof TransactionPin that)) return false;
 
-        return getId().equals(that.getId()) && getUser().equals(that.getUser()) && getPin().equals(that.getPin()) && getAttempt().equals(that.getAttempt()) && getBlocked().equals(that.getBlocked()) && getCreatedAt().equals(that.getCreatedAt()) && getUpdatedAt().equals(that.getUpdatedAt());
+        return Objects.equals(getId(), that.getId()) && getPin().equals(that.getPin()) && getAttempt().equals(that.getAttempt()) && getBlocked().equals(that.getBlocked()) && getCreatedAt().equals(that.getCreatedAt()) && Objects.equals(getUpdatedAt(), that.getUpdatedAt());
     }
 
     @Override
     public int hashCode() {
-        int result = getId().hashCode();
-        result = 31 * result + getUser().hashCode();
+        int result = Objects.hashCode(getId());
         result = 31 * result + getPin().hashCode();
         result = 31 * result + getAttempt().hashCode();
         result = 31 * result + getBlocked().hashCode();
         result = 31 * result + getCreatedAt().hashCode();
-        result = 31 * result + getUpdatedAt().hashCode();
+        result = 31 * result + Objects.hashCode(getUpdatedAt());
         return result;
     }
 
@@ -117,5 +112,9 @@ public class TransactionPin {
         if (pin.length() != 8) {
             throw new TransactionPinException(ErrorCodeEnum.TP0001.getMessage(), ErrorCodeEnum.TP0001.getCode());
         }
+    }
+
+    public void resetAttempts() {
+        this.attempt = TransactionPin.NUMBER_OF_CHANCES;
     }
 }
