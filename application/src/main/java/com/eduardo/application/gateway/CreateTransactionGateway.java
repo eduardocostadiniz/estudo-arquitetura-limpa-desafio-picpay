@@ -1,8 +1,8 @@
-package com.eduardo.usecase;
+package com.eduardo.application.gateway;
 
 import com.eduardo.core.domain.Transaction;
 
-public interface CreateTransactionUseCase {
+public interface CreateTransactionGateway {
 
     Transaction create(Transaction transaction);
 
