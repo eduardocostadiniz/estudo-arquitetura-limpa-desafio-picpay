@@ -2,7 +2,9 @@ package com.eduardo.core.exception.enums;
 
 public enum ErrorCodeEnum {
 
-    ON0001("Tax Number Invalid", "ON-0001"),
+    ON0001("Tax Number invalid", "ON-0001"),
+    ON0002("Tax Number unavailable", "ON-0002"),
+    ON0003("E-mail unavailable", "ON-0003"),
 
     TR0001("Shop Keeper has not transfer allowed", "TR-0001"),
     TR0002("Balance is not enough", "TR-0002"),
