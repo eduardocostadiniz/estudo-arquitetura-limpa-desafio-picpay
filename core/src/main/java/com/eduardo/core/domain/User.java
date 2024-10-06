@@ -3,6 +3,7 @@ package com.eduardo.core.domain;
 import com.eduardo.core.domain.enums.UserTypeEnum;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class User {
@@ -13,31 +14,28 @@ public class User {
     private TaxNumber taxNumber;
     private String fullname;
     private UserTypeEnum type;
-    private TransactionPin transactionPin;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public User() {
     }
 
-    public User(String email, String password, TaxNumber taxNumber, String fullname, UserTypeEnum type, TransactionPin transactionPin) {
+    public User(String email, String password, TaxNumber taxNumber, String fullname, UserTypeEnum type) {
         this.email = email;
         this.password = password;
         this.taxNumber = taxNumber;
         this.fullname = fullname;
         this.type = type;
-        this.transactionPin = transactionPin;
         this.createdAt = LocalDateTime.now();
     }
 
-    public User(UUID id, String email, String password, TaxNumber taxNumber, String fullname, UserTypeEnum type, TransactionPin transactionPin, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public User(UUID id, String email, String password, TaxNumber taxNumber, String fullname, UserTypeEnum type, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.taxNumber = taxNumber;
         this.fullname = fullname;
         this.type = type;
-        this.transactionPin = transactionPin;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -90,14 +88,6 @@ public class User {
         this.type = type;
     }
 
-    public TransactionPin getTransactionPin() {
-        return transactionPin;
-    }
-
-    public void setTransactionPin(TransactionPin transactionPin) {
-        this.transactionPin = transactionPin;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -119,7 +109,7 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
 
-        return getId().equals(user.getId()) && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getTaxNumber().equals(user.getTaxNumber()) && getFullname().equals(user.getFullname()) && getType() == user.getType() && getTransactionPin().equals(user.getTransactionPin()) && getCreatedAt().equals(user.getCreatedAt()) && getUpdatedAt().equals(user.getUpdatedAt());
+        return getId().equals(user.getId()) && getEmail().equals(user.getEmail()) && getPassword().equals(user.getPassword()) && getTaxNumber().equals(user.getTaxNumber()) && getFullname().equals(user.getFullname()) && getType() == user.getType() && getCreatedAt().equals(user.getCreatedAt()) && Objects.equals(getUpdatedAt(), user.getUpdatedAt());
     }
 
     @Override
@@ -130,7 +120,6 @@ public class User {
         result = 31 * result + getTaxNumber().hashCode();
         result = 31 * result + getFullname().hashCode();
         result = 31 * result + getType().hashCode();
-        result = 31 * result + getTransactionPin().hashCode();
         result = 31 * result + getCreatedAt().hashCode();
         result = 31 * result + getUpdatedAt().hashCode();
         return result;
